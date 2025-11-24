@@ -1,0 +1,24 @@
+---
+description: C# coding standards and style guide for Godot
+globs: "*.cs"
+---
+# C# Standards (Godot)
+
+## Naming Conventions
+- **Files**: `PascalCase.cs` (Must match the Class Name)
+    - *Note*: This overrides the general Godot `snake_case` rule.
+- **Classes**: `PascalCase`
+- **Methods**: `PascalCase`
+- **Public Properties**: `PascalCase`
+- **Private Fields**: `_camelCase`
+- **Local Variables**: `camelCase`
+
+## Godot Specifics
+- **Signals**: Use the `[Signal]` attribute and end the name with `EventHandler` (e.g., `public delegate void MySignalEventHandler();`).
+- **Nodes**: Use `GetNode<T>("Path")` for type safety.
+- **Exports**: Use `[Export]` attribute for inspector variables.
+
+## Best Practices
+- **Properties over Fields**: Use Properties (`{ get; set; }`) for public data.
+- **LINQ**: Use LINQ for collection manipulation where readable, but be mindful of performance in hot paths (e.g., `_Process`).
+- **File-Scoped Namespaces**: Use file-scoped namespaces (`namespace MyGame;`) to reduce indentation.

@@ -1,0 +1,19 @@
+---
+description: Godot Engine best practices and architecture
+globs: "project.godot, *.tscn, *.tres"
+---
+# Godot Engine Standards
+
+## Architecture
+- **Composition over Inheritance**: Prefer attaching small, focused components (Nodes) to a scene rather than creating deep inheritance hierarchies.
+- **Signal-Driven**: Use Signals for "upward" communication (Child -> Parent) to keep children decoupled.
+- **Call Down**: Parents can call functions on children directly.
+
+## File Organization
+- **Colocation**: Keep the Scene (`.tscn`), Script (`.gd`), and Assets (textures, sounds) for a specific entity in the same folder.
+- **Snake Case**: All file names must be `snake_case` (e.g., `player_controller.tscn`, not `PlayerController.tscn`).
+
+## Godot 4.x Specifics
+- Use `@export` instead of `export`.
+- Use `super()` instead of `.`.
+- Use `Callable` for signals (e.g., `signal.connect(callable)`).

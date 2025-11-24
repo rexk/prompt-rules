@@ -1,0 +1,18 @@
+---
+description: TypeScript best practices and standards
+globs: "*.ts, *.tsx"
+---
+# TypeScript Standards
+
+## Context
+We enforce strict typing and modern patterns to ensure code quality and maintainability.
+
+## Rules
+- **Use `interface`** for object contracts, services, and class definitions (e.g., `interface User`, `interface AuthService`).
+    - *Why?* Interfaces handle inheritance (`extends`) and implementation (`implements`) more naturally for object-oriented patterns.
+- **Use `type`** for unions, intersections, primitives, and state definitions.
+    - *Example*: `type UserState = 'loading' | 'ready' | 'error'`
+    - *Example*: `type UserResponse = User | Error`
+- **No `any`**: Use `unknown` if the type is truly not known, and narrow it down.
+- **Strict Null Checks**: Always handle `null` and `undefined` explicitly.
+- **Async/Await**: Prefer `async/await` over `.then()` chains for readability.

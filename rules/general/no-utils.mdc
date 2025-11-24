@@ -1,0 +1,20 @@
+---
+description: Enforce domain-specific naming and ban generic utility folders
+globs: "*"
+---
+# Domain-Specific Naming
+
+## Context
+We want to avoid "junk drawer" folders that become dumping grounds for unrelated code.
+
+## Rules
+- **DO NOT** create folders named:
+    - `utils`
+    - `helpers`
+    - `common`
+    - `shared` (unless it is a shared package in a monorepo)
+- **DO** use domain-specific names that describe *what* the code does:
+    - `date-formatting`
+    - `auth-helpers`
+    - `string-manipulation`
+- **DO** colocate helper functions with the components or modules that use them, if they are not truly global.

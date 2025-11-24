@@ -1,0 +1,21 @@
+---
+description: GDScript coding standards and style guide
+globs: "*.gd"
+---
+# GDScript Standards
+
+## Naming Conventions
+- **Files**: `snake_case.gd`
+- **Classes**: `PascalCase` (e.g., `class_name PlayerController`)
+- **Variables/Functions**: `snake_case` (e.g., `var health_points`, `func take_damage()`)
+- **Constants**: `SCREAMING_SNAKE_CASE`
+
+## Typing
+- **Strict Typing**: Always specify types for variables and function arguments/returns.
+    - **Good**: `var health: float = 100.0`
+    - **Bad**: `var health = 100`
+- **Void Returns**: Explicitly state `-> void` if a function returns nothing.
+
+## Best Practices
+- **Static Typing**: Use `:=` for inferred static typing where obvious (e.g., `var name := "Player"`).
+- **Private Members**: Prefix private variables/functions with `_` (e.g., `var _internal_state`).

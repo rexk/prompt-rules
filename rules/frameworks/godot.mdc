@@ -10,10 +10,60 @@ globs: "project.godot, *.tscn, *.tres"
 - **Call Down**: Parents can call functions on children directly.
 
 ## File Organization
+- **Feature-Based Structure**: Organize files by feature/entity, not by file type.
+    - *Recommended Structure*:
+      ```text
+      res://
+      ├── assets/          # Global raw assets (fonts, music, shared textures)
+      ├── components/      # Reusable generic components (Health, Hitbox)
+      ├── game/            # Main game logic
+      │   ├── player/      # Player.tscn, Player.gd, jump.wav, skin.png
+      │   ├── enemies/     # Enemy scenes, scripts
+      │   ├── levels/      # Level scenes
+      │   └── ui/          # UI scenes and scripts
+      ├── resources/       # Custom Resource definitions (ItemData.gd)
+      ├── autoloads/       # Global singletons
+      └── main.tscn
+      ```
 - **Colocation**: Keep the Scene (`.tscn`), Script (`.gd`), and Assets (textures, sounds) for a specific entity in the same folder.
 - **Snake Case**: All file names must be `snake_case` (e.g., `player_controller.tscn`, not `PlayerController.tscn`).
+
+## Asset Organization
+- **Scope Rule**:
+    - **Local**: Assets used by a single feature (e.g., `player_jump.wav`) must be colocated with that feature (`game/player/`).
+    - **Global**: Assets used by multiple features (e.g., `ui_click.wav`, `main_font.ttf`) belong in `res://assets/`.
+- **Global Structure**:
+    ```text
+    res://assets/
+    ├── fonts/
+    ├── audio/
+    │   ├── music/
+    │   └── sfx/
+    ├── textures/
+    │   ├── prototypes/
+    │   └── ui/
+    └── models/
+    ```
 
 ## Godot 4.x Specifics
 - Use `@export` instead of `export`.
 - Use `super()` instead of `.`.
 - Use `Callable` for signals (e.g., `signal.connect(callable)`).
+
+## Design Patterns
+- **Component-Based Design**: Break down complex logic into small, reusable Nodes (Components) and add them as children.
+    - *Example*: `HealthComponent`, `HitboxComponent`, `InventoryComponent`.
+    - *Rule*: Components should be self-contained and communicate via Signals.
+- **State Machines**:
+    - **Node-Based**: Use for entities needing visual representation or child nodes (e.g., Player, Enemies). Each state is a Node.
+    - **Class-Based**: Use for pure logic or complex data handling (e.g., Turn Manager, AI). Each state is a Class/RefCounted.
+- **Autoloads (Singletons)**: Use sparingly for global state (e.g., `GameManager`, `AudioController`).
+    - *Warning*: Avoid tight coupling; access via `GetNode` or unique names if possible, but Autoloads are acceptable for truly global systems.
+- **Resource-Based Data**: Use `Resource` classes (`.tres`) for static data (stats, items, settings) instead of JSON or Dictionaries.
+    - *Benefit*: Type-safe, editable in Inspector, and easy to manage.
+- **Object Pooling**: Use for high-frequency objects (bullets, effects) to avoid instantiation lag.
+    - *Note*: Only use when performance profiling indicates a bottleneck (case-by-case).
+- **Dependency Injection**:
+    - **Inspector Injection**: Use `@export` to assign dependencies (nodes/resources) in the Editor. Decouples scripts from the scene tree.
+    - **Setup Pattern**: Use a `setup()` function for runtime instantiation to pass dependencies immediately (pseudo-constructor).
+        - *Example*: `var enemy = enemy_scene.instantiate(); enemy.setup(player_target);`

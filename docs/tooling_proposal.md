@@ -4,7 +4,10 @@
 To provide a `cheat.sh`-style experience for both Humans (CLI) and Agents (MCP), we propose building a tooling layer in this repository.
 
 ## Recommended Stack
-- **Language**: **TypeScript** (running on Node.js or Bun).
+- **Language**: **TypeScript**
+- **Runtime**: **Node.js** (LTS)
+- **Package Manager**: **npm** (for simplicity and ubiquity)
+- **Execution**: **tsx** (for instant "save-and-run" iteration without compilation)
 - **Why**:
     - Native language of MCP (Model Context Protocol).
     - Native language of VS Code / Cursor extensions.
@@ -32,7 +35,7 @@ We will adopt a "Monorepo" structure where Content and Code live together:
 - **Install**: `npx prompt-rules install --tags nextjs,typescript`
     - **Filtering**: Selects rules based on frontmatter tags (e.g., `tags: ["frontend", "react"]`).
     - **Conflict Resolution**: If multiple files match (e.g., `typescript-strict.mdc` vs `typescript-loose.mdc`), the CLI prompts the user or uses a priority weight.
-    - **Profiles**: Support for "Stack Profiles" (e.g., `stacks/t3-stack.json`) that define a preset list of tags/rules to install.
+
 - **List**: `npx prompt-rules list`
     - Shows available rule sets and their tags.
 

@@ -1,0 +1,20 @@
+---
+description: Godot Scene (.tscn) best practices and standards
+globs: "*.tscn"
+---
+# Godot Scene Standards
+
+## Resource References
+- **Prefer UIDs**: Always use the Unique ID (`uid://`) when referencing resources in `ext_resource` tags, rather than the file path (`res://`).
+    - *Why*: IDs allow moving files without breaking references.
+    - *Example*:
+      ```ini
+      [ext_resource type="Script" uid="uid://c8l...7s" path="res://game/ui/hud.gd" id="1_hud_script"]
+      ```
+    - *Bad*:
+      ```ini
+      [ext_resource type="Script" path="res://game/ui/hud.gd" id="1_hud_script"]
+      ```
+
+## Scene Structure
+- **Root Node Naming**: The root node of a scene should reference the scene's name in `SnakeCase` or match the filename.

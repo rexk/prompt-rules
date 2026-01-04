@@ -1,0 +1,75 @@
+---
+description: Standards for writing git commit messages using Conventional Commits and strict formatting rules.
+globs: .git/*
+---
+# Git Commit Guidelines
+
+## Context
+These rules ensure that git commit messages are readable, consistent, and machine-parseable. They follow the **Conventional Commits** specification and adhere to strict formatting limits to avoid truncation in tools like GitHub.
+
+## Rules
+
+### 1. Style & Formatting
+- **Subject line length**:
+    - **Soft limit**: 50 characters (Preferred for readability in `git log`).
+    - **Hard limit**: 72 characters (Strict maximum. GitHub truncates titles longer than this).
+- **Body line length**: Wrap all body lines at **72 characters**.
+- **Capitalization**: Capitalize the first letter of the subject line.
+- **Punctuation**: **DO NOT** end the subject line with a period.
+- **Mood**: Use the **imperative mood** in the subject line (e.g., "Add feature" instead of "Added feature" or "Adds feature").
+- **Spacing**: A blank line **MUST** separate the subject from the body.
+
+### 2. Conventional Commits Structure
+All commits must follow the Conventional Commits structure:
+
+```
+type(scope): subject
+
+[optional body]
+
+[optional footer(s)]
+```
+
+### 3. Allowed Types
+- `feat`: A new feature
+- `fix`: A bug fix
+- `docs`: Documentation only changes
+- `style`: Changes that do not affect the meaning of the code (white-space, formatting, missing semi-colons, etc)
+- `refactor`: A code change that neither fixes a bug nor adds a feature
+- `perf`: A code change that improves performance
+- `test`: Adding missing tests or correcting existing tests
+- `build`: Changes that affect the build system or external dependencies (example scopes: gulp, broccoli, npm)
+- `ci`: Changes to our CI configuration files and scripts (example scopes: Travis, Circle, BrowserStack, SauceLabs)
+- `chore`: Other changes that don't modify src or test files
+- `revert`: Reverts a previous commit
+
+### 4. Content Guidelines
+- **Atomic Commits**: Each commit should ideally represent a **single logical change**. If you find yourself writing a huge list of unrelated changes in the body, consider splitting the commit.
+- **Explain "Why"**: The body should focus on the **motivation** for the change and contrast it with previous behavior. This is critical for **AI-readability** and future debugging. Explain *why* the change was made, not just *what* changed.
+
+### 5. Breaking Changes
+- Indicate breaking changes by placing `BREAKING CHANGE:` in the footer or strictly appending `!` after the type/scope (e.g., `feat!: drop support for Node 6`).
+
+## Examples
+
+#### Good (Feature with scope)
+```
+feat(auth): add login with google support
+
+Implement OAuth2 flow for Google Sign-In.
+This allows users to log in without creating a separate account/password.
+
+Resolves: #123
+```
+
+#### Good (Bug fix, no scope)
+```
+fix: correct typo in user registration error
+
+The error message previously said "Email required" when the password was missing.
+```
+
+#### Bad (Imperative mood violation, too long, no type)
+```
+Added a new function to the user controller that handles the logic for resetting passwords when the user forgets them.
+```

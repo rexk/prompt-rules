@@ -1,0 +1,87 @@
+---
+description: Python development best practices, tooling (uv, ruff, ty), and project structure
+globs: "*.py"
+---
+# Python Development Rules
+
+## Tooling Standards
+- **Manager**: Use `uv` for all project management (dependencies, environments, python versions).
+    - *Why*: `uv` is a comprehensive "cargo-like" tool for Python that replaces pip, pip-tools, and venv.
+- **Linter/Formatter**: Use `ruff`.
+    - *Configuration*: Enable all upgrade (`UP`) and type-checking (`TCH`) rules.
+- **Static Analysis**: Use `ty` (by Astral).
+    - *Why*: Seamless integration with `uv`/`ruff`, high performance, and "gradual guarantee" philosophy.
+    - *Fallback*: If `ty` is unavailable, use strict `pyright`.
+
+## Project Structure
+
+### 1. Single Project (Default)
+Use for standalone applications or libraries.
+```text
+project-root/
+├── .python-version    # Managed by uv
+├── pyproject.toml     # Dependencies and tool config
+├── uv.lock            # Exact versions
+├── src/
+│   └── package_name/
+│       ├── __init__.py
+│       └── main.py
+└── tests/
+```
+
+### 2. Multi-Project Workspace
+Use for monorepos with shared libraries.
+```text
+workspace-root/
+├── pyproject.toml      # [tool.uv.workspace] members = ["packages/*"]
+├── uv.lock             # Shared lockfile
+└── packages/
+    ├── app-a/
+    │   └── pyproject.toml
+    └── lib-shared/
+        └── pyproject.toml
+```
+
+## Type Safety
+- **Future Annotations**: Always include `from __future__ import annotations` at the top of the file.
+    - *Why*: Enables forward references and cleaner syntax (e.g. `list[str]` instead of `List[str]`) without string quoting.
+- **Strongly Avoid `Any`**: Treat `Any` as a last resort or a failure of the type system.
+    - *Action*: If you must use it, add a comment explaining why strict typing wasn't possible.
+    - *Alternatives*: Use `Protocol`, `TypedDict`, or Generics (`TypeVar`) to model structural or polymorphic types.
+- **Always Type Hint**: All function arguments, return values, and class specific attributes must be typed.
+    - *Bad*: `def process(data): ...`
+    - *Good*: `def process(data: dict[str, str]) -> None: ...`
+- **Runtime Validation**: Use `pydantic` for boundary data validation (API requests, config files).
+
+## Coding Practices
+- **Composition over Inheritance**: Favor object composition and interfaces (Protocols) over class inheritance.
+    - *Why*: Reduces coupling and fragility. Inheritance should be reserved for strict "is-a" relationships where the subclass must adhere to the Liskov Substitution Principle.
+- **Static Imports**: Place all imports at the top of the file.
+    - *Prohibited*: Dynamic imports (inside functions/methods) unless strictly required to break circular dependencies or for optional runtime features.
+- **Dependency Injection**: Prefer passing dependencies via `__init__` rather than using global state or static accessors.
+    - *Why*: Improves testability and decoupling.
+- **No Reflection**: Avoid `hasattr`, `getattr`, or dynamic imports unless absolutely necessary for framework-level code.
+    - *Why*: Breaks static analysis and makes code harder to refactor.
+- **Modern Python**: Target Python 3.10+ features.
+    - Use `match` / `case` for pattern matching.
+    - Use union types `X | Y` instead of `Union[X, Y]`.
+
+## Testing
+- **Framework**: Use `pytest` for all testing.
+    - *Prohibited*: `unittest` module (unless interfacing with legacy code).
+- **Fixtures**: Use `conftest.py` for shared fixtures. Favor fixtures over setup/teardown methods.
+- **Structure**: Mirrors the `src/` directory.
+
+## Documentation
+- **Style**: Follow **Google Style** docstrings.
+- **Requirement**: Public modules, classes, and methods must have docstrings.
+    - *Include*: Arguments, Return values, and Raises sections.
+
+## Error Handling
+- **Custom Hierarchy**: Create a base `ProjectError` (inheriting from `Exception`) and derive specific errors from it.
+- **No Bare Exceptions**: Never raise or catch `Exception` or `BaseException` directly without re-raising or logging appropriately.
+    - *Bad*: `except Exception: pass`
+
+## Logging
+- **Structured Logging**: Use `structlog` (preferred) or standard logging configured for JSON output.
+- **No Print**: Do not use `print()` for runtime logging.
